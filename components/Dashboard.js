@@ -1,58 +1,43 @@
 import React, { useEffect, useState } from "react";
+import { getTime } from "../util/time";
 import styles from "./Dashboard.module.css";
 
 export default function Dashboard() {
-  const [time, setTime] = useState("");
-  const [showSeconds, setShowSeconds] = useState(true);
-  const [greeting, setGreeting] = useState("");
+  const [greeting, setGreeting] = useState({ message: "", timeOfDay: "" });
+  const [time, setTime] = useState(getTime());
 
-  const updateTime = () => {
-    const { displayString, hour } = getTime();
-    updatePageContent();
-    setTime(displayString);
-  };
+  useEffect(() => {
+    return setTimeout(() => setTime(getTime()), 1000);
+  }, [time.seconds]);
 
-  const getTime = () => {
-    const date = new Date();
+  useEffect(() => {
+    updateGreeting();
+  }, [time.hour]);
 
-    const hour = date.getHours();
-    const minutes = date.getMinutes();
-    const seconds = date.getSeconds();
+  const updateGreeting = React.useCallback(() => {
+    const { hour } = time;
 
-    const hourString = hour % 12 ? hour - 12 : 12;
-    const minuteString = minutes > 9 ? minutes : "0" + minutes;
-    const secondsString = seconds > 9 ? seconds : "0" + seconds;
-
-    const displayString = `${hourString}:${minuteString}${
-      showSeconds ? ":" + secondsString : ""
-    } ${hour < 12 ? "AM" : "PM"}`;
-
-    return {
-      hour,
-      minutes,
-      seconds,
-      displayString,
-    };
-  };
-
-  const updatePageContent = () => {
-    const { hour } = getTime();
-
-    if (hour < 12) {
-      setGreeting("Good Morning");
+    const greeting = {};
+    if (hour < 11) {
+      greeting.message = "Good Morning";
+      greeting.timeOfDay = "morning";
     } else if (hour < 18) {
-      setGreeting("Good Afternoon");
+      greeting.message = "Good Afternoon";
+      greeting.timeOfDay = "afternoon";
     } else {
-      setGreeting("Good Evening");
+      greeting.message = "Good Evening";
+      greeting.timeOfDay = "evening";
     }
-  };
 
-  const timerId = setInterval(updateTime, 1000);
+    setGreeting(greeting);
+  }, [time.hour]);
 
   return (
-    <div className={styles.dashboard}>
-      <time className={styles.time}>{time}</time>
-      <h1 className={styles.greeting}>{greeting}</h1>
+    <div className={`${styles.dashboard} ${styles[greeting.timeOfDay]}`}>
+      <time className={styles.time} suppressHydrationWarning>
+        {time.displayString}
+      </time>
+      <h1 className={styles.greeting}>{greeting.message}</h1>
     </div>
   );
 }

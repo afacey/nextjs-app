@@ -1,13 +1,27 @@
 .dashboard {
   font-family: "Quicksand", sans-serif;
-  color: #eee;
-  background-color: #111;
   width: 100vw;
   height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-size: cover;
+  background-position: center;
+}
+
+.dashboard.morning {
+  background-image: url("/images/morning.jpeg");
+}
+
+.dashboard.afternoon {
+  background-image: url("/images/afternoon.jpeg");
+  color: #eee;
+}
+
+.dashboard.evening {
+  background-image: url("/images/evening.jpeg");
+  color: #eee;
 }
 
 .greeting {
