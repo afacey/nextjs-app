@@ -1,0 +1,21 @@
+.dashboard {
+  font-family: "Quicksand", sans-serif;
+  color: #eee;
+  background-color: #111;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.greeting {
+  font-size: 4rem;
+  margin: 5rem 0;
+}
+
+.time {
+  font-size: 8rem;
+  letter-spacing: 2px;
+}
